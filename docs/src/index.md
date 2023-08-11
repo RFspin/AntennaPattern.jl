@@ -4,7 +4,7 @@ CurrentModule = APattern
 
 # APattern
 
-Documentation for [APattern](https://github.com/Public/APattern.jl).
+Documentation for [APattern](https://github.com/RFspin/APattern.jl).
 
 ```@index
 ```
