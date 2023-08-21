@@ -21,7 +21,7 @@ Generates a CSV file from a CST 3D ASCII file. The CST 3D ASCII file is a text f
     - output_filename: processed file
 
 """
-function preprocess_CST_3D_ASCII_file(input_filename, output_filename)
+function preprocess_CST_3D_ASCII_file(input_filename::String, output_filename::String)
     open(input_filename, "r") do infile
         open(output_filename, "w") do outfile
             for line in eachline(infile)
