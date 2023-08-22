@@ -1,5 +1,6 @@
 using Plots
 using LinearAlgebra
+using PyCall
 
 """
 # sph2cartData
@@ -56,20 +57,14 @@ end
 Sets the plotting engine.
 Available engines are:
 - `:plotlyjs`
-- `:gr`
 - `:pyplot`
-- `:unicodeplots`
 """
 function set_engine(engine::Symbol)
-    @assert engine in [:plotlyjs, :gr, :pyplot, :unicodeplots] "Available engines are :plotly, :gr, :pyplot, :unicodeplots"
+    @assert engine in [:plotlyjs, :pyplot] "Available engines are :plotlyjs, :pyplot"
     if engine == :plotlyjs
         plotlyjs()
-    elseif engine == :gr
-        gr()
     elseif engine == :pyplot
         pyplot()
-    elseif engine == :unicodeplots
-        unicodeplots()
     else
         error("Unsupported engine: $engine")
     end
@@ -119,6 +114,18 @@ function antenna_pattern_3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Fl
         title = attributes[:common][:title]
         )
 
+    elseif engine == Plots.PyPlotBackend()
+        pygui(true)
+        p = surface(X, Y, Z, surfacecolor = RN, 
+        colorbar_title = attributes[:common][:colorbar_title],
+        colorscale = attributes[:plots_specific][:color_scale],
+        xlabel = attributes[:common][:xlabel],
+        ylabel = attributes[:common][:ylabel],
+        zlabel = attributes[:common][:zlabel],
+        title = attributes[:common][:title],
+        clim = (minimum(RN), maximum(RN)),
+        colorbar_ticks = ticks
+        )
     else
         error("Unsupported engine: $engine")
     end
