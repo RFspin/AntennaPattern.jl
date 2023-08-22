@@ -20,3 +20,5 @@ df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS
     @test all(all.(x -> x isa Float64, eachcol(df)))
     @test !all(any.(ismissing, eachcol(df)))
 end
+
+# Another day, another file.
