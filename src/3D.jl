@@ -79,7 +79,16 @@ Plots the 3D antenna pattern.
 - `Y::Matrix{Float64}`: y coordinate, [N x M]
 - `Z::Matrix{Float64}`: z coordinate, [N x M]
 - `RN::Matrix{Float64}`: normalized data, [N x M]
-- `attributes::Dict`: attributes of the plot, default: `Dict(:common => Dict(:xlabel => "X", :ylabel => "Y", :zlabel => "Z", :title => "3D Antenna Pattern", :colorbar_title => "Normalized Power [dB]"), :plots_specific => Dict(:color_scale => "Rainbow"))`
+- `attributes::Dict`: attributes of the plot, default: 
+    `Dict(:common => Dict(
+        :xlabel => "X", 
+        :ylabel => "Y", 
+        :zlabel => "Z", 
+        :title => "3D Antenna Pattern", 
+        :colorbar_title => "Normalized Power [dB]"), 
+        :plots_specific => Dict(
+            :color_scale => "Rainbow")
+            )`
 
 ## Returns:
 - `p`: plot
@@ -88,14 +97,29 @@ function antenna_pattern_3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Fl
     RN::Matrix{Float64}, 
     attributes = Dict(
         :common => Dict(
+            :width => 800,
+            :height => 800,
             :xlabel => "X",
             :ylabel => "Y",
             :zlabel => "Z",
-            :title => "3D Antenna Pattern",
-            :colorbar_title => "Normalized Power [dB]"
+            :title => "Antenna directivity [dBi]",
+            :show_grid => false,
+            :show_axis => false,
+            :legend => true,
             ), 
+        :antenna_axis => Dict(
+            :show => true,
+            :theta => 90,
+            :phi => 0,
+            :color => :blue,
+            :linewidth => 3,
+            :linestyle => :auto, # [:auto, :dash, :dashdot, :dot, :solid]
+            :label => "",
+            :axis_multiplier => 1.3
+            ),
         :plots_specific => Dict(
-            :color_scale => "Rainbow")
+            :color_scale_plotly => "Rainbow",
+            :color_scale_pyplot => :jet)
             )
     )
 
@@ -103,31 +127,55 @@ function antenna_pattern_3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Fl
     ticks = round.(collect(LinRange(minimum(RN), maximum(RN), round(Int64, abs(maximum(RN) - minimum(RN))))), digits=2)
     # get the set backend
     engine = backend()
+    default(size=(attributes[:common][:width], attributes[:common][:height]))
 
     if engine == Plots.PlotlyJSBackend()
         p = surface(X, Y, Z, surfacecolor = RN, 
-        colorbar_title = attributes[:common][:colorbar_title],
-        colorscale = attributes[:plots_specific][:color_scale],
+        colorscale = attributes[:plots_specific][:color_scale_plotly],
         xlabel = attributes[:common][:xlabel],
         ylabel = attributes[:common][:ylabel],
         zlabel = attributes[:common][:zlabel],
-        title = attributes[:common][:title]
+        title = attributes[:common][:title],
+        xgrid = attributes[:common][:show_grid],
+        ygrid = attributes[:common][:show_grid],
+        zgrid = attributes[:common][:show_grid],
+        axis = attributes[:common][:show_axis],
+        legend = attributes[:common][:legend],
         )
 
     elseif engine == Plots.PyPlotBackend()
         pygui(true)
         p = surface(X, Y, Z, surfacecolor = RN, 
-        colorbar_title = attributes[:common][:colorbar_title],
-        colorscale = attributes[:plots_specific][:color_scale],
+        cmap = attributes[:plots_specific][:color_scale_pyplot],
         xlabel = attributes[:common][:xlabel],
         ylabel = attributes[:common][:ylabel],
         zlabel = attributes[:common][:zlabel],
         title = attributes[:common][:title],
+        grid = attributes[:common][:show_grid],
+        ticks = attributes[:common][:show_grid],
+        showaxis = attributes[:common][:show_axis],
+        legend = attributes[:common][:legend],
         clim = (minimum(RN), maximum(RN)),
+        antialiased= true,
         colorbar_ticks = ticks
         )
     else
         error("Unsupported engine: $engine")
+    end
+
+    if attributes[:antenna_axis][:show]
+        theta = attributes[:antenna_axis][:theta]
+        phi = attributes[:antenna_axis][:phi]
+        r = attributes[:antenna_axis][:axis_multiplier] * maximum(Z)
+        x = r .* [0, cos(deg2rad(theta)) * cos(deg2rad(phi))]
+        y = r .* [0, cos(deg2rad(theta)) * sin(deg2rad(phi))]
+        z = r .* [0, sin(deg2rad(theta))]
+        plot3d!(x, y, z, 
+            color = attributes[:antenna_axis][:color], 
+            linewidth = attributes[:antenna_axis][:linewidth], 
+            linestyle = attributes[:antenna_axis][:linestyle], 
+            label = attributes[:antenna_axis][:label], 
+        )
     end
     
     return p

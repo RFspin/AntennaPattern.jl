@@ -18,6 +18,6 @@ df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS
 x, y, z, r_norm = sph2cartData(df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"], 15, true)
 
 # Engine
-set_engine(:pyplot)
+set_engine(:plotlyjs)
 # Plot
 p = antenna_pattern_3D(x, y, z, r_norm)
