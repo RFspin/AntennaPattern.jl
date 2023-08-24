@@ -22,15 +22,10 @@ jobs:
           - ubuntu-latest
         arch:
           - x64
-        python-version:
-          - '2.7'
     env:
       PYTHON: ""
     steps:
       - uses: actions/checkout@v3
-      - name: Install libpython2.7 for `find_libpython` test
-        run: sudo apt-get install python2.7-dev
-        if: ${{ matrix.python-version != '2.7' && matrix.os == 'ubuntu-latest' }}
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
