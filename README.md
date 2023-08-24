@@ -25,4 +25,9 @@ The future work includes:
 - Parsing data from vector network analysers, spectrum analysers (specifically ms464x Anritsu series);
 
 ## Visual outputs
-- TODO
+### PlotlyJS
+<img width="587" alt="plotly" src="https://github.com/RFspin/APattern.jl/assets/128054331/2ee48938-e0ae-4adb-9f80-2e04af6ea75b">
+
+### PyPlot
+![pyplot](https://github.com/RFspin/APattern.jl/assets/128054331/85d9244a-0908-41d2-8130-44e530fecb9c)
+
