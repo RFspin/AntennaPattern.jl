@@ -15,9 +15,10 @@ PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
 
 [compat]
-DataFrames = "1"
-CSV = "0.10"
 BenchmarkTools = "1"
+CSV = "0.10"
+DataFrames = "1"
+Plots = "1"
 julia = "1.9"
 
 [extras]
