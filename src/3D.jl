@@ -21,7 +21,8 @@ const DEFAULTS = Dict(
     :aaxis_linewidth => 3.0,
     :aaxis_linestyle => :auto,
     :aaxis_label => "",
-    :aaxis_axis_multiplier => 1.3
+    :aaxis_axis_multiplier => 1.3,
+    :python_interactive => true,
 )
 
 
@@ -160,7 +161,7 @@ function antenna_pattern_3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Fl
         )
 
     elseif engine == Plots.PyPlotBackend()
-        pygui(true)
+        pygui(attributes[:python_interactive])
         p = surface(X, Y, Z, surfacecolor = RN, 
         cmap = attributes[:color_scale_pyplot],
         xlabel = attributes[:xlabel],

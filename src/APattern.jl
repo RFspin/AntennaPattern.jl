@@ -1,6 +1,7 @@
 module APattern
 
-using CSV, DataFrames
+using CSV, DataFrames, Conda
+ENV["PYTHON"] = joinpath(Conda.BINDIR, "python")
 
 # Imports
 include("transformations.jl")
