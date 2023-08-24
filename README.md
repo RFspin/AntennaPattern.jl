@@ -4,9 +4,6 @@
 
 > "3D antenna pattern processing done easy."
 
-> **Warning**
->There is no 3D plotting yet, this package is a WIP. Processing data from CST is available.
-
 Simple open source solution to antenna 3D data processing. Why?
 - Processing data from measurements is a constant and never-ending struggle.
 - There is very little tools that allow you to easily do this.
@@ -15,21 +12,17 @@ Simple open source solution to antenna 3D data processing. Why?
  - TODO - when published, in the meantime feel free to clone the repository
 
 ## Using the package
-See tests to use the package.
+See the [example_3D_plots.jl](example_3D_plots.jl) for instruction and explanation how to use the package.
 
-Minimal example:
-```julia
-using APattern
-using CSV
-using DataFrames
+## Road map
+### PlotlyJS
+For the upcoming changes see [#9](https://github.com/RFspin/APattern.jl/issues/9) 
+### PyPlot
+For the upcoming changes see [#10](https://github.com/RFspin/APattern.jl/issues/10)
 
-# File paths
-filename = joinpath(dirname(pwd()), "data", "pattern_CP_2.92GHz.txt")
-outputfilename = joinpath(dirname(pwd()), "data", "pattern_CP_2.92GHz_processed.csv")
+The future work includes:
+- Polar graphs in any theta/phi angles;
+- Parsing data from vector network analysers, spectrum analysers (specifically ms464x Anritsu series);
 
-# preprocess data
-preprocess_CST_3D_ASCII_file(filename, outputfilename)
-
-# import data
-df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS, skipto=3)
-```
+## Visual outputs
+- TODO
