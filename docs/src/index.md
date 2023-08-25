@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = APattern
+CurrentModule = AntennaPattern
 ```
 
-# APattern
+# AntennaPattern
 
-Documentation for [APattern](https://github.com/RFspin/APattern.jl).
+Documentation for [AntennaPattern](https://github.com/RFspin/AntennaPattern.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [APattern]
+Modules = [AntennaPattern]
 ```

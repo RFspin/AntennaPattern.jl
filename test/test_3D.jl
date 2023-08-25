@@ -1,4 +1,4 @@
-using APattern
+using AntennaPattern
 using Test
 using CSV
 using DataFrames

@@ -1,16 +1,16 @@
-using APattern
+using AntennaPattern
 using Documenter
 
-DocMeta.setdocmeta!(APattern, :DocTestSetup, :(using APattern); recursive=true)
+DocMeta.setdocmeta!(AntennaPattern, :DocTestSetup, :(using AntennaPattern); recursive=true)
 
 makedocs(;
-    modules=[APattern],
+    modules=[AntennaPattern],
     authors="bosakRFSpin <bosak@rfspin.com> and contributors",
-    repo="https://github.com/RFspin/APattern.jl/blob/{commit}{path}#{line}",
-    sitename="APattern.jl",
+    repo="https://github.com/RFspin/AntennaPattern.jl/blob/{commit}{path}#{line}",
+    sitename="AntennaPattern.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://RFspin.github.io/APattern.jl",
+        canonical="https://RFspin.github.io/AntennaPattern.jl",
         edit_link="dev",
         assets=String[],
     ),
@@ -20,6 +20,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/RFspin/APattern.jl",
+    repo="github.com/RFspin/AntennaPattern.jl",
     devbranch="dev",
 )

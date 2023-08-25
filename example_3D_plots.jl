@@ -1,12 +1,12 @@
 """
-Welcome to APattern.jl by RFspin
+Welcome to AntennaPattern.jl by RFspin
 Feel free to fork this repo. and do your magic!
 By antenna masters for antenna masters!
 
 In this file you will find an example usage of the package for 3D plotting and manipulation. Be aware that this is a blazing hot development. If you are missing a feature or find an issue post it on Github or contact me @bosakRFSpin.
 """
 ##
-using APattern
+using AntennaPattern
 using CSV
 using DataFrames
 using Plots

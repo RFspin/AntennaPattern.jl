@@ -1,5 +1,5 @@
 using BenchmarkTools
-using APattern
+using AntennaPattern
 
 x = rand(500);
 y = rand(500);

@@ -1,4 +1,4 @@
-using APattern
+using AntennaPattern
 using Test
 
 println("Test suite started...")

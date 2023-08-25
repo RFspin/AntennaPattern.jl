@@ -1,5 +1,5 @@
 using Test
-using APattern
+using AntennaPattern
 using CSV
 using DataFrames
 

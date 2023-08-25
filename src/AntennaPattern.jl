@@ -1,4 +1,4 @@
-module APattern
+module AntennaPattern
 
 using CSV, DataFrames
 

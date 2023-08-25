@@ -1,5 +1,5 @@
 using Test
-using APattern
+using AntennaPattern
 
 println("Testing transformations.jl...")
 r = [5.002139542235902, 5.00009999900002, 3.004546554806565]
