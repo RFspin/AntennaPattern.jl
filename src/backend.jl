@@ -24,11 +24,14 @@ end
 Sets the plotting engine.
 Available engines are:
 - `:gr`
+- `:plotlyjs`
 """
 function set_engine_1D(engine::Symbol)
-    @assert engine in [:gr] "Available engines are :gr"
+    @assert engine in [:gr, :plotlyjs] "Available engines are :gr, :plotlyjs" 
     if engine == :gr
         gr()
+    elseif engine == :plotlyjs
+        plotlyjs()
     else
         error("Unsupported engine: $engine")
     end
