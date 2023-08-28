@@ -23,15 +23,15 @@ x, y, z, r_norm = sph2cartData(df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir
 end
 
 @testset "PlotlyJS" begin
-    set_engine(:plotlyjs)
-    @test_throws AssertionError set_engine(:test)
+    set_engine_3D(:plotlyjs)
+    @test_throws AssertionError set_engine_3D(:test)
     @test backend() == Plots.PlotlyJSBackend()
     @test_warn "Unrecognized argument: test_arg" antenna_pattern_3D(x, y, z, r_norm, show_grid=false, show_axis=false, width=500, height=500, title="test_3D.jl ", test_arg=1)
     @test typeof(antenna_pattern_3D(x, y, z, r_norm)) == Plots.Plot{Plots.PlotlyJSBackend}
 end
 
 @testset "PyPlot" begin
-    set_engine(:pyplot)
+    set_engine_3D(:pyplot)
     @test backend() == Plots.PyPlotBackend()
     @test typeof(antenna_pattern_3D(x, y, z, r_norm)) == Plots.Plot{Plots.PyPlotBackend}
 end
