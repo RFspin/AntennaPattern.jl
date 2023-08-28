@@ -1,8 +1,11 @@
 name: CI
 on:
-  pull_request:
+  push:
     branches:
       - dev
+  pull_request:
+    branches:
+      - dev 
 concurrency:
   # Skip intermediate builds: always.
   # Cancel intermediate builds: only if it is a pull request build.
@@ -20,6 +23,7 @@ jobs:
           - 'nightly'
         os:
           - ubuntu-latest
+          - windows-latest
         arch:
           - x64
     env:
