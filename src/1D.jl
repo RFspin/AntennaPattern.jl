@@ -1,18 +1,13 @@
 using Plots
-using AntennaPattern
-using CSV
-using DataFrames
-using PyCall
 
-# File paths
-filename = joinpath(pwd(), "data", "pattern_CP_2.92GHz.txt")
-outputfilename = joinpath(pwd(), "data", "pattern_CP_2.92GHz_processed.csv")
-
-# preprocess data
-preprocess_CST_3D_ASCII_file(filename, outputfilename)
-
-# import data
-df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS, skipto=3)
+const DEFAULTS_1D = Dict(
+    :width => 600, 
+    :height => 500,
+    :label => "Antenna Pattern",
+    :legend => true,
+    :line_width => 3.0,
+    :color => :red,
+)
 
 
 function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Real}, Vector{Float64}}; repeatFirst::Bool = true, kwargs...)
@@ -37,32 +32,47 @@ function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vecto
         values = vcat(values, values[1])
     end
 
+    # Merge the user-provided kwargs with the default values
+    attributes = merge(DEFAULTS_1D, Dict(kwargs))
+
+    # Optional: Check for unrecognized arguments
+    for key in keys(attributes)
+        if !haskey(DEFAULTS_1D, key)
+            @warn "Unrecognized argument: $key"
+        end
+    end
+
+    # Set the default size
+    default(size=(attributes[:width], attributes[:height]))
 
     minl = floor(minimum(values) / 10) * 10
     maxl = ceil(maximum(values) / 10) * 10
 
     if backend() == Plots.GRBackend()
-        println(values)
         p = plot(
             deg2rad.(angles), 
             values, 
             proj = :polar, 
             lims = (minl, maxl),
-            legend = false,
+            legend = attributes[:legend],
+            label = attributes[:label],
+            linewidth = attributes[:line_width],
+            color = attributes[:color],
         )
 
     elseif backend() == Plots.PlotlyJSBackend()
-        println(angles)
-        println(values)
         p = plot(
             deg2rad.(angles), 
             values, 
             proj = :polar,
-            legend = false,
+            legend =  attributes[:legend],
+            label = attributes[:label],
+            linewidth = attributes[:line_width],
+            color = attributes[:color],
         )
         # this is a workaround to set the limits of the polar plot
         # I did not manage to find a better way
-        plot!([0, 0], [minl, maxl], proj = :polar, linecolor=:white)
+        plot!([0, 0], [minl, maxl], proj = :polar, linecolor=:white, label="")
     else
         error("Backend not supported")
     end
@@ -70,6 +80,3 @@ function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vecto
     return p
 
 end
-
-set_engine_1D(:plotlyjs)
-antenna_pattern_polar(:Theta, 90.0, df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"])
