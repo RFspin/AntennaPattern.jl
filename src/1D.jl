@@ -116,7 +116,6 @@ function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vecto
     
     println("Main lobe magnitude: ", findmax(values)[1], " dB")
     println("Main lobe direction: ", rad2deg(angles[findmax(values)[2]]), "°")
-    println("minimum " , minl)
     return p
 
 end

@@ -9,7 +9,9 @@ Simple open source solution to antenna 3D data processing. Why?
 - There is very little tools that allow you to easily do this.
 
 ## Installation
- - TODO - when published, in the meantime feel free to clone the repository
+```julia
+] add AntennaPattern
+```
 
 ## Using the package
 See the [example_3D_plots.jl](example_3D_plots.jl) for instruction and explanation how to use the package.
