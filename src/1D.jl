@@ -6,7 +6,7 @@ const DEFAULTS_1D = Dict(
     :label => "Antenna Pattern",
     :legend => true,
     :line_width => 3.0,
-    :color => :red,
+    :color => :red
 )
 
 
@@ -17,13 +17,13 @@ function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vecto
     if Constant == :Theta
         @assert CutAngle in θ "Desired angle is not in the data"
         indicies = θ .≈ CutAngle
-        angles = φ[indicies]
+        angles = deg2rad.(φ[indicies])
         values = data[indicies]
         
     elseif Constant == :Phi
         @assert CutAngle in φ "Desired angle is not in the data" 
         indicies = φ .≈ CutAngle
-        angles = θ[indicies]
+        angles = deg2rad.(θ[indicies])
         values = data[indicies]
     end
 
@@ -45,38 +45,43 @@ function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vecto
     # Set the default size
     default(size=(attributes[:width], attributes[:height]))
 
-    minl = floor(minimum(values) / 10) * 10
-    maxl = ceil(maximum(values) / 10) * 10
+    # Set the default limits
+    minl = floor(minimum(values))
+    maxl = ceil(maximum(values))
 
     if backend() == Plots.GRBackend()
         p = plot(
-            deg2rad.(angles), 
+            angles, 
             values, 
             proj = :polar, 
-            lims = (minl, maxl),
+            lims = :round,
             legend = attributes[:legend],
             label = attributes[:label],
             linewidth = attributes[:line_width],
             color = attributes[:color],
         )
 
-    elseif backend() == Plots.PlotlyJSBackend()
+    elseif backend() == Plots.PyPlotBackend()
         p = plot(
-            deg2rad.(angles), 
+            angles, 
             values, 
             proj = :polar,
             legend =  attributes[:legend],
             label = attributes[:label],
             linewidth = attributes[:line_width],
             color = attributes[:color],
+            lims = :round
         )
-        # this is a workaround to set the limits of the polar plot
-        # I did not manage to find a better way
-        plot!([0, 0], [minl, maxl], proj = :polar, linecolor=:white, label="")
+        
+        # main lobe
+        
     else
         error("Backend not supported")
     end
 
+    plot!([0, angles[findmax(values)[2]]], [minl, maxl], proj = :polar, linecolor=:blue, label="Main lobe")
+    println("Main lobe magnitude: ", findmax(values)[1], " dB")
+    println("Main lobe direction: ", rad2deg(angles[findmax(values)[2]]), "°")
     return p
 
 end
