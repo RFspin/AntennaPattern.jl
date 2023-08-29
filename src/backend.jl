@@ -24,14 +24,11 @@ end
 Sets the plotting engine.
 Available engines are:
 - `:gr`
-- `:pyplot`
 """
 function set_engine_1D(engine::Symbol)
-    @assert engine in [:gr, :pyplot] "Available engines are :gr, :pyplot" 
+    @assert engine in [:gr] "Available engines are :gr" 
     if engine == :gr
         gr()
-    elseif engine == :pyplot
-        pyplot()
     else
         error("Unsupported engine: $engine")
     end

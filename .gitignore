@@ -25,3 +25,5 @@ Manifest.toml
 
 # Ignoring .csv files - assuming that .txt are the exported files and csv are processed data
 *.csv
+# Ignorig .gif files
+*.gif
