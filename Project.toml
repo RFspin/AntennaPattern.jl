@@ -1,7 +1,7 @@
 name = "AntennaPattern"
 uuid = "190b1fc3-f725-4b56-bc75-d9d21258ce5e"
 authors = ["bosakRFSpin <bosak@rfspin.com> and contributors"]
-version = "1.0.1"
+version = "1.1.0"
 
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
