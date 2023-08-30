@@ -1,6 +1,6 @@
 ![RFspin_logo](https://github.com/RFspin/APattern.jl/assets/128054331/1a4c7715-ad1f-4b28-8d8d-0cea6c955dac)
 
-## Overview [![CI](https://github.com/RFspin/APattern.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/RFspin/APattern.jl/actions/workflows/CI.yml) [![codecov](https://codecov.io/gh/RFspin/APattern.jl/graph/badge.svg?token=MapVB9qg1G)](https://codecov.io/gh/RFspin/APattern.jl)
+## Overview [![CI](https://github.com/RFspin/APattern.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/RFspin/APattern.jl/actions/workflows/CI.yml) [![codecov](https://codecov.io/gh/RFspin/AntennaPattern.jl/graph/badge.svg?token=MapVB9qg1G)](https://codecov.io/gh/RFspin/AntennaPattern.jl)
 
 > "3D antenna pattern processing done easy."
 
