@@ -30,7 +30,7 @@ x, y, z, r_norm = sph2cartData(df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir
 # Run the set_engine function to set the plotting engine
 # In Plots.jl the default plotting engine is GR
 # The available engines are :plotlyjs and :pyplot
-set_engine(:pyplot)
+set_engine_3D(:pyplot)
 # Plot the data
 p = antenna_pattern_3D(x, y, z, r_norm)
 
@@ -39,6 +39,6 @@ p = antenna_pattern_3D(x, y, z, r_norm)
 # Run the set_engine function to set the plotting engine
 # In Plots.jl the default plotting engine is GR
 # The available engines are :plotlyjs and :pyplot
-set_engine(:plotlyjs)
+set_engine_3D(:plotlyjs)
 # Plot the data
 p = antenna_pattern_3D(x, y, z, r_norm)

@@ -77,24 +77,6 @@ end
 
 
 """
-# set_engine
-Sets the plotting engine.
-Available engines are:
-- `:plotlyjs`
-- `:pyplot`
-"""
-function set_engine(engine::Symbol)
-    @assert engine in [:plotlyjs, :pyplot] "Available engines are :plotlyjs, :pyplot"
-    if engine == :plotlyjs
-        plotlyjs()
-    elseif engine == :pyplot
-        pyplot()
-    else
-        error("Unsupported engine: $engine")
-    end
-end
-
-"""
 # antenna_pattern_3D
 Plots the 3D antenna pattern.
 
