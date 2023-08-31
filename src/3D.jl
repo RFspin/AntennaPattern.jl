@@ -26,6 +26,39 @@ const DEFAULTS = Dict(
 )
 
 
+function createSurface(θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Float64}, Vector{Real}, Matrix{Real}, Matrix{Float64}}; repeat_first_φ::Bool = false, θ_f::Symbol = :rad, φ_f::Symbol = :rad)
+    
+    θr = copy(θ)
+    φr = copy(φ)
+    r = copy(data)
+    θn = length(unique(θr))
+    φn = length(unique(φr))
+    
+    @assert θ_f == :deg || θ_f == :rad "θ_f must be either :deg or :rad"
+    @assert φ_f == :deg || φ_f == :rad "φ_f must be either :deg or :rad"
+    θr = θ_f == :deg ? deg2rad.(θr) : θr
+    φr = φ_f == :deg ? deg2rad.(φr) : φr
+    
+    if typeof(data) == Vector{Real} || typeof(data) == Vector{Float64}
+        r = reshape(r, θn, φn)
+    elseif typeof(data) == Matrix{Real} || typeof(data) == Matrix{Float64}
+        @assert size(r) == (θn, φn) "data must be either a vector or a matrix of size (θn, φn)"
+    end
+
+    # Reshape arrays
+    θr = reshape(θr, θn, φn)
+    φr = reshape(φr, θn, φn)
+
+    if repeat_first_φ
+        φr = hcat(φr, 2*pi.+φr[:, 1])
+        θr = hcat(θr, θr[:, 1])
+        r = hcat(r, r[:, 1])
+    end
+    
+    return θr, φr, r
+end
+
+
 """
 # sph2cartData
 Converts spherical data to cartesian data.
@@ -74,6 +107,8 @@ function sph2cartData(θ::Vector{Float64}, φ::Vector{Float64}, data::Vector{Flo
     
     return X, Y, Z, rn
 end
+
+
 
 
 """
