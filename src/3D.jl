@@ -25,7 +25,24 @@ const DEFAULTS = Dict(
     :python_interactive => true,
 )
 
+"""
+# createSurface
+Creates a surface from the given data.
 
+## Args:
+- `θ::Union{Vector{Real}, Vector{Float64}}`: θ coordinate in radians
+- `φ::Union{Vector{Real}, Vector{Float64}}`: φ coordinate in radians
+- `data::Union{Vector{Float64}, Vector{Real}, Matrix{Real}, Matrix{Float64}}`: data
+- `repeatFirstφ::Bool`: repeat first φ value at the end, default: `false`
+- `θf::Symbol`: θ format, default: `:rad`
+- `φf::Symbol`: φ format, default: `:rad`
+
+## Returns:
+- `θr`: θ coordinate in radians, [N x M]
+- `φr`: φ coordinate in radians, [N x M]
+- `r`: r, [N x M]
+
+"""
 function createSurface(θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Float64}, Vector{Real}, Matrix{Real}, Matrix{Float64}}; repeatFirstφ::Bool = false, θf::Symbol = :rad, φf::Symbol = :rad)
     
     θr = copy(θ)
