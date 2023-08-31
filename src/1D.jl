@@ -19,7 +19,7 @@ const DEFAULTS_1D = Dict(
 )
 
 """
-# antenna_pattern_polar
+# polarPattern
 Polar plot of an antenna pattern.
 
 ## Arguments
@@ -49,7 +49,7 @@ Polar plot of an antenna pattern.
 - `p::Plot`: The plot object.
 
 """
-function antenna_pattern_polar(Constant::Symbol, CutAngle::Real, θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Real}, Vector{Float64}}; repeatFirst::Bool = true, kwargs...)
+function polarPattern(Constant::Symbol, CutAngle::Real, θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Real}, Vector{Float64}}; repeatFirst::Bool = true, kwargs...)
     @assert Constant in [:Theta, :Phi] "Constant must be either :Theta or :Phi"
     @assert CutAngle >= 0 && CutAngle <= 360 "CutAngle must be between 0 and 360"
     @assert backend() in [Plots.GRBackend()] "Backend not supported"

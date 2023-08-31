@@ -25,59 +25,94 @@ const DEFAULTS = Dict(
     :python_interactive => true,
 )
 
-
 """
-# sph2cartData
-Converts spherical data to cartesian data.
+# createSurface
+Creates a surface from the given data.
 
 ## Args:
-- `θ::Vector{Float64}`: theta coordinate, [N x 1]
-- `φ::Vector{Float64}`: phi coordinate, [M x 1]
-- `data::Matrix{Float64}`: data to be converted, [N x M]
-- `offset::Real`: offset of the data (sets the dynamic range of the data), default: `0` (no offset)
-- `repeat_first_φ::Bool`: repeat first value of the data, default: `false`
+- `θ::Union{Vector{Real}, Vector{Float64}}`: θ coordinate in radians
+- `φ::Union{Vector{Real}, Vector{Float64}}`: φ coordinate in radians
+- `data::Union{Vector{Float64}, Vector{Real}, Matrix{Real}, Matrix{Float64}}`: data
+- `repeatFirstφ::Bool`: repeat first φ value at the end, default: `false`
+- `θf::Symbol`: θ format, default: `:rad`
+- `φf::Symbol`: φ format, default: `:rad`
 
 ## Returns:
-- `x`: x coordinate, [N x M]
-- `y`: y coordinate, [N x M]
-- `z`: z coordinate, [N x M]
-- `r_norm`: normalized data, [N x M]
+- `θr`: θ coordinate in radians, [N x M]
+- `φr`: φ coordinate in radians, [N x M]
+- `r`: r, [N x M]
 
 """
-function sph2cartData(θ::Vector{Float64}, φ::Vector{Float64}, data::Vector{Float64}, offset::Real = 0, repeat_first_φ::Bool = false)
+function createSurface(θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vector{Real}, Vector{Float64}}, data::Union{Vector{Float64}, Vector{Real}, Matrix{Real}, Matrix{Float64}}; repeatFirstφ::Bool = false, θf::Symbol = :rad, φf::Symbol = :rad)
     
-    θr = deg2rad.(θ)
-    φr = deg2rad.(φ)
-    
+    θr = copy(θ)
+    φr = copy(φ)
+    r = copy(data)
     θn = length(unique(θr))
     φn = length(unique(φr))
     
+    @assert θf == :deg || θf == :rad "θf must be either :deg or :rad"
+    @assert φf == :deg || φf == :rad "φf must be either :deg or :rad"
+    θr = θf == :deg ? deg2rad.(θr) : θr
+    φr = φf == :deg ? deg2rad.(φr) : φr
+    
+    if typeof(data) == Vector{Real} || typeof(data) == Vector{Float64}
+        r = reshape(r, θn, φn)
+    elseif typeof(data) == Matrix{Real} || typeof(data) == Matrix{Float64}
+        @assert size(r) == (θn, φn) "data must be either a vector or a matrix of size (θn, φn)"
+    end
+
     # Reshape arrays
     θr = reshape(θr, θn, φn)
     φr = reshape(φr, θn, φn)
-    r = reshape(data, θn, φn)
 
-    if repeat_first_φ
+    if repeatFirstφ
         φr = hcat(φr, 2*pi.+φr[:, 1])
         θr = hcat(θr, θr[:, 1])
         r = hcat(r, r[:, 1])
     end
     
-    # Apply transformations
-    r[r .< -1*offset] .= -1*offset
-    rn = copy(r)
-    r .= r .+ offset
+    return θr, φr, r
+end
 
-    X = r .* sin.(θr) .* cos.(φr)
-    Y = r .* sin.(θr) .* sin.(φr)
-    Z = r .* cos.(θr)
+
+"""
+# cartesianPattern
+Converts spherical pattern to cartesian pattern and sets its dynamic range.
+
+## Args:
+- `θ::Union{Matrix{Float64}, Matrix{Real}}`: θ coordinate in radians, [N x M]
+- `φ::Union{Matrix{Float64}, Matrix{Real}}`: φ coordinate in radians, [N x M]
+- `r::Union{Matrix{Float64}, Matrix{Real}}`: r, [N x M]
+- `dymanicMinimum::Real`: dymanicMinimum, default: `0`, sets the dynamic range of the data to [dymanicMinimum, max(data)], must be lesser or equal to 0
+
+## Returns:
+- `x`: x coordinate, [N x M]
+- `y`: y coordinate, [N x M]
+- `z`: z coordinate, [N x M]
+- `r_norm`: normalized `r`, [N x M]
+
+"""
+function cartesianPattern(θ::Union{Matrix{Float64}, Matrix{Real}}, φ::Union{Matrix{Float64}, Matrix{Real}}, r::Union{Matrix{Float64}, Matrix{Real}}, dymanicMinimum::Real = 0)
+
+    @assert size(θ) == size(φ) == size(r) "θ, φ and data must be of the same size"
+    @assert dymanicMinimum <= 0 "dymanicMinimum must be lesser than 0"
+    
+    # Apply transformations
+    r[r .< dymanicMinimum] .= dymanicMinimum
+    rn = copy(r)
+    r .= r .- dymanicMinimum
+
+    X = r .* sin.(θ) .* cos.(φ)
+    Y = r .* sin.(θ) .* sin.(φ)
+    Z = r .* cos.(θ)
     
     return X, Y, Z, rn
 end
 
 
 """
-# antenna_pattern_3D
+# antennaPattern3D
 Plots the 3D antenna pattern.
 
 ## Args:
@@ -109,7 +144,7 @@ Plots the 3D antenna pattern.
 ## Returns:
 - `p`: plot
 """
-function antenna_pattern_3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Float64}, RN::Matrix{Float64}; kwargs...)
+function antennaPattern3D(X::Matrix{Float64}, Y::Matrix{Float64}, Z::Matrix{Float64}, RN::Matrix{Float64}; kwargs...)
 
 
     # Merge the user-provided kwargs with the default values
