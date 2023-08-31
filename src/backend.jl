@@ -2,13 +2,13 @@ using Plots
 
 
 """
-# set_engine_3D
+# setBackend3D
 Sets the plotting engine.
 Available engines are:
 - `:plotlyjs`
 - `:pyplot`
 """
-function set_engine_3D(engine::Symbol)
+function setBackend3D(engine::Symbol)
     @assert engine in [:plotlyjs, :pyplot] "Available engines are :plotlyjs, :pyplot"
     if engine == :plotlyjs
         plotlyjs()
@@ -20,12 +20,12 @@ function set_engine_3D(engine::Symbol)
 end
 
 """
-# set_engine_1D
+# setBackend1D
 Sets the plotting engine.
 Available engines are:
 - `:gr`
 """
-function set_engine_1D(engine::Symbol)
+function setBackend1D(engine::Symbol)
     @assert engine in [:gr] "Available engines are :gr" 
     if engine == :gr
         gr()
