@@ -37,6 +37,10 @@ Creates a surface from the given data.
 - `θf::Symbol`: θ format, default: `:rad`
 - `φf::Symbol`: φ format, default: `:rad`
 
+## Possible combinations of θ, φ and data:
+- `θ::Vector, φ::Vector, data::Vector` - data must be of size (θn*φn)
+- `θ::Vector, φ::Vector, data::Matrix` - data must be of size (θn, φn)
+
 ## Returns:
 - `θr`: θ coordinate in radians, [N x M]
 - `φr`: φ coordinate in radians, [N x M]
@@ -57,14 +61,16 @@ function createSurface(θ::Union{Vector{Real}, Vector{Float64}}, φ::Union{Vecto
     φr = φf == :deg ? deg2rad.(φr) : φr
     
     if typeof(data) == Vector{Real} || typeof(data) == Vector{Float64}
+        @assert size(r) == size(θr) == size(φr) "data, θ and φ must be of the same size"
+        # Reshape arrays
+        θr = reshape(θr, θn, φn)
+        φr = reshape(φr, θn, φn)
         r = reshape(r, θn, φn)
     elseif typeof(data) == Matrix{Real} || typeof(data) == Matrix{Float64}
         @assert size(r) == (θn, φn) "data must be either a vector or a matrix of size (θn, φn)"
+        θr = repeat(θ, 1, φn)
+        φr = repeat(φ', θn, 1)
     end
-
-    # Reshape arrays
-    θr = reshape(θr, θn, φn)
-    φr = reshape(φr, θn, φn)
 
     if repeatFirstφ
         φr = hcat(φr, 2*pi.+φr[:, 1])

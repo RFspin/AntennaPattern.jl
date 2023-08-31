@@ -20,6 +20,10 @@ df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS
 θ2, φ2, r2 = createSurface(deg2rad.(df[!, "θ[deg.]"]), deg2rad.(df[!, "φ[deg.]"]), df[!, "|Dir.|[dBi]"], repeatFirstφ=true)
 θ3, φ3, r3 = createSurface(df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"], repeatFirstφ=false, θf = :deg, φf = :deg)
 θ4, φ4, r4 = createSurface(deg2rad.(df[!, "θ[deg.]"]), deg2rad.(df[!, "φ[deg.]"]), df[!, "|Dir.|[dBi]"], repeatFirstφ=false)
+# Creating data for Vector, Vector, Matrix combinations
+θv = θ1[:, 1]
+φv = φ1[1, :]
+θ, φ, r = createSurface(θv, φv, r1)
 
 @testset "Creating surface" begin
     @test_throws AssertionError createSurface(df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"], θf = :test)
@@ -35,6 +39,7 @@ df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS
     @test θ3 == θ4
     @test φ3 == φ4
     @test r3 == r4
+    @test (size(θ) == size(φ) == size(r) == (37, 73)) & (size(θv)[1] == 37) & (size(φv)[1] == 73)
 end
 
 
