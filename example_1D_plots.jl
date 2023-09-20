@@ -16,7 +16,12 @@ df = CSV.read(outputfilename, DataFrame, header=@STANDARD_CST_3D_PATTERN_COLUMNS
 
 ## Plotting data with GR backend
 setBackend1D(:gr)
-polarPattern(:Theta, 0.0, df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"], label="CP", legend = :topleft, rotation = 0)
+p = polarPattern(:Theta, 0.0, df[!, "θ[deg.]"], df[!, "φ[deg.]"], df[!, "|Dir.|[dBi]"], label="CP", legend = :topleft, rotation = 0)
+## Saving data
+formats = [".png", ".svg", ".pdf", ".html"]
+for format in formats
+    Plots.savefig(p, "./export/gr/test$format") #replace with your path
+end
 
 ## Animation
 # Some sample animations you can do
