@@ -27,3 +27,8 @@ Manifest.toml
 *.csv
 # Ignorig .gif files
 *.gif
+# ignoring vscode folders
+.vscode/
+
+# ignoring export folder
+export/
