@@ -33,7 +33,10 @@ x, y, z, r_norm = cartesianPattern(θ1, φ1, r1, -15)
 setBackend3D(:pyplot)
 # Plot the data
 p = antennaPattern3D(x, y, z, r_norm)
-
+formats = [".png", ".svg", ".pdf", ".html"]
+for format in formats
+    Plots.savefig(p, "./export/pyplot/test$format")
+end
 ## PlotlyJS backend
 ## The following code cell shows how to generate a 3D surface plot using PlotlyJS backend with Plots.jl.
 ## Run the setBackend3D function to set the plotting engine
@@ -42,3 +45,8 @@ p = antennaPattern3D(x, y, z, r_norm)
 setBackend3D(:plotlyjs)
 ## Plot the data
 p = antennaPattern3D(x, y, z, r_norm, width=500, height=500)
+## Saving plot - plotlyjs
+formats = [".png", ".svg", ".pdf", ".html"]
+for format in formats
+    Plots.savefig(p, "./export/plotlyjs/test$format")
+end

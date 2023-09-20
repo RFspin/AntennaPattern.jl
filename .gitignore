@@ -29,3 +29,6 @@ Manifest.toml
 *.gif
 # ignoring vscode folders
 .vscode/
+
+# ignoring export folder
+export/
